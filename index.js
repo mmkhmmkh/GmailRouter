@@ -4,7 +4,7 @@ const {google} = require('googleapis');
 const {createMimeMessage} = require('mimetext');
 const _ = require('lodash');
 
-const subjectsMapRaw = JSON.parse(fs.readFileSync("map.json").toString()).map(v => {
+const subjectsMapRaw = JSON.parse(process.env.router).map(v => {
     v.next = v.next ? v.next : 0;
     v.probabilities = v.probabilities ? v.probabilities : _.range(v.emails.length).map(() => 1);
     return v;
@@ -25,12 +25,7 @@ const SCOPES = ['https://mail.google.com/'];
 // time.
 const TOKEN_PATH = 'token.json';
 
-// Load client secrets from a local file.
-fs.readFile('client_secret_639021606870-5j0hpg5jmul4npklk74a34gjh21h06j0.apps.googleusercontent.com.json', (err, content) => {
-    if (err) return console.log('Error loading client secret file:', err);
-    // Authorize a client with credentials, then call the Gmail API.
-    authorize(JSON.parse(content), main);
-});
+authorize(JSON.parse(process.env.oauth), main);
 
 function authorize(credentials, callback) {
     const {client_secret, client_id, redirect_uris} = credentials.installed;
@@ -218,7 +213,7 @@ async function run(gmail) {
                 const rec = subjectMap.emails[subjectMap.next];
                 subjectMap.next = (subjectMap.next + 1) % subjectMap.emails.length;
                 subjectsMapRaw[i].next = subjectMap.next;
-                fs.writeFileSync("map.json", JSON.stringify(subjectsMapRaw));
+                process.env.router = JSON.stringify(subjectsMapRaw);
                 if (email.egress) {
                     msg.setSender({
                         name: "Advanced Programming Spring 01",
