@@ -66,15 +66,15 @@ function getNewToken(oAuth2Client, callback) {
                 console.log('Token stored to', TOKEN_PATH);
             });
             callback(oAuth2Client);
+            if(server) {
+                setTimeout(() => {
+                    server.close(() => {
+                        console.log("Done.");
+                    });
+                }, 1000);
+            }
         });
         res.end("Done.");
-        if(server) {
-            setTimeout(() => {
-                server.close(() => {
-                    console.log("Done.");
-                });
-            }, 1000);
-        }
     });
     server = app.listen(3000, () => {
         console.log(`Waiting for code...`);
