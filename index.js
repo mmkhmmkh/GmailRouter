@@ -1,8 +1,10 @@
 const fs = require('fs');
 const readline = require('readline');
+const express = require("express");
 const {google} = require('googleapis');
 const {createMimeMessage} = require('mimetext');
 const _ = require('lodash');
+const app = express();
 
 const subjectsMapRaw = JSON.parse(process.env.router).map(v => {
     v.next = v.next ? v.next : 0;
@@ -18,12 +20,16 @@ const labels = [];
 
 const repliers = [...new Set(subjectsMap.reduce((p, c) => [...p, ...c.emails], []))];
 
+
+
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://mail.google.com/'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
 const TOKEN_PATH = 'token.json';
+
+let server;
 
 authorize(JSON.parse(process.env.oauth), main);
 
@@ -50,9 +56,8 @@ function getNewToken(oAuth2Client, callback) {
         input: process.stdin,
         output: process.stdout,
     });
-    rl.question('Enter the code from that page here: ', (code) => {
-        rl.close();
-        oAuth2Client.getToken(code, (err, token) => {
+    app.get('/oauth', (req, res) => {
+        oAuth2Client.getToken(decodeURIComponent(req.query.code), (err, token) => {
             if (err) return console.error('Error retrieving access token', err);
             oAuth2Client.setCredentials(token);
             // Store the token to disk for later program executions
@@ -62,7 +67,18 @@ function getNewToken(oAuth2Client, callback) {
             });
             callback(oAuth2Client);
         });
+        res.end("Done.");
+        if(server) {
+            setTimeout(() => {
+                server.close(() => {
+                    console.log("Done.");
+                });
+            }, 1000);
+        }
     });
+    server = app.listen(3000, () => {
+        console.log(`Waiting for code...`);
+    })
 }
 
 const getSubject = (payload) => payload.headers.filter(p => p.name === "Subject")[0].value;
