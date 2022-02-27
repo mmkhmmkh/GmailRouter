@@ -1,0 +1,74 @@
+[
+  {
+    "regex": "(G_)\\d+",
+    "emails": [
+      "vbha.mmk@gmail.com"
+    ],
+    "next": 0
+  },
+  {
+    "regex": "(ENV_)\\d+",
+    "emails": [
+      "Foghol47@gmail.com",
+      "azare242@gmail.com",
+      "hesamadibi80@gmail.com",
+      "sina.shariati@yahoo.com",
+      "masjedifarid20@gmail.com",
+      "z.k.d.6133@gmail.com"
+    ],
+    "next": 0,
+    "probabilities": [
+      0.3, 0.3, 1, 1, 1, 1
+    ]
+  },
+  {
+    "regex": "(C[12]_)\\d+",
+    "emails": [
+      "Foghol47@gmail.com",
+      "azare242@gmail.com",
+      "hesamadibi80@gmail.com",
+      "sina.shariati@yahoo.com",
+      "masjedifarid20@gmail.com",
+      "z.k.d.6133@gmail.com"
+    ],
+    "next": 0,
+    "probabilities": [
+      0.3, 0.3, 1, 1, 1, 1
+    ]
+  },
+  {
+    "regex": "(WS1_)\\d+",
+    "emails": [
+      "shafaghi1378@gmail.com"
+    ],
+    "next": 0
+  },
+  {
+    "regex": "(WS2_)\\d+",
+    "emails": [
+      "sina.saadati@aut.ac.ir"
+    ],
+    "next": 0
+  },
+  {
+    "regex": "(WS3_)\\d+",
+    "emails": [
+      "amkkashani@gmail.com"
+    ],
+    "next": 0
+  },
+  {
+    "regex": "(WS4_)\\d+",
+    "emails": [
+      "vbha.mmk@gmail.com"
+    ],
+    "next": 0
+  },
+  {
+    "regex": "(HW\\d_Q\\d_)\\d+",
+    "emails": [
+      "saman2000hoseini@gmail.com"
+    ],
+    "next": 0
+  }
+]

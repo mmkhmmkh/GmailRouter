@@ -1,0 +1,14 @@
+{
+  "name": "GmailRouter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "run": "node ."
+  },
+  "dependencies": {
+    "googleapis": "39",
+    "lodash": "^4.17.21",
+    "mimetext": "^2.0.7"
+  }
+}
