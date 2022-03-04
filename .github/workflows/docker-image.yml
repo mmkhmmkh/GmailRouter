@@ -24,4 +24,4 @@ jobs:
       run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/aut-gmail-router:$(date +%s)
       
     - name: Docker Push
-      run: docker push ${{secrets.DOCKER_USER}}/aut-gmail-router
+      run: docker push ${{secrets.DOCKER_USER}}/aut-gmail-router:$(date +%s)
