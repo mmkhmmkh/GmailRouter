@@ -2,9 +2,12 @@
   "name": "GmailRouter",
   "version": "1.0.0",
   "main": "index.js",
+  "repository": "https://github.com/mmkhmmkh/GmailRouter",
+  "author": "MMKH <vbha.mmk@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "run": "node ."
+    "run": "node .",
+    "production": "pm2-runtime process.yml --env production"
   },
   "dependencies": {
     "express": "^4.17.3",

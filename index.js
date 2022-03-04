@@ -124,7 +124,7 @@ async function listEmails(gmail) {
             const subjects = [];
             if (res.data?.messages) {
                 for (let i = 0; i < res.data.messages.length; i++) {
-                    subjects.push(await new Promise(resolve2 => {
+                    const result = await new Promise(resolve2 => {
                             gmail.users.messages.get({
                                 userId: 'me',
                                 id: res.data.messages[i].id,
@@ -187,25 +187,31 @@ async function listEmails(gmail) {
                                         attachments: attachments,
                                     });
                                 } else {
-                                    // Student -> TA
-                                    // Ingress
-                                    resolve2({
-                                        egress: false,
-                                        subject: getSubject(res1.data.payload),
-                                        sender: {
-                                            name: getSenderName(res1.data.payload),
-                                            addr: addr,
-                                        },
-                                        id: res.data.messages[i].id,
-                                        body: body.filter(value => value.mime === "text/plain" || value.mime === "text/html"),
-                                        attachments: attachments,
-                                    });
+                                    if (!addr.includes("noreply") && !addr.includes("no-reply") && !addr.includes("apps-scripts-notifications")) {
+                                        // Student -> TA
+                                        // Ingress
+                                        resolve2({
+                                            egress: false,
+                                            subject: getSubject(res1.data.payload),
+                                            sender: {
+                                                name: getSenderName(res1.data.payload),
+                                                addr: addr,
+                                            },
+                                            id: res.data.messages[i].id,
+                                            body: body.filter(value => value.mime === "text/plain" || value.mime === "text/html"),
+                                            attachments: attachments,
+                                        });
+                                    } else {
+                                        resolve2(undefined);
+                                    }
                                 }
 
 
                             });
                         }
-                    ));
+                    );
+                    if (result)
+                        subjects.push(result);
                 }
             }
             resolve(subjects);
