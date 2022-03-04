@@ -120,7 +120,7 @@ async function listEmails(gmail) {
             userId: 'me',
             q: "to:ap.winter2022@gmail.com in:inbox is:unread"
         }, async (err, res) => {
-            if (err) return console.log('The API returned an error: ' + err);
+            if (err) return console.log('[0] The API returned an error: ' + err);
             const subjects = [];
             if (res.data?.messages) {
                 for (let i = 0; i < res.data.messages.length; i++) {
@@ -129,7 +129,7 @@ async function listEmails(gmail) {
                                 userId: 'me',
                                 id: res.data.messages[i].id,
                             }, async (err1, res1) => {
-                                if (err1) return console.log('The API returned an error: ' + err1);
+                                if (err1) return console.log('[1] The API returned an error: ' + err1);
 
                                 await new Promise(resolve4 => {
                                     gmail.users.messages.modify({
@@ -155,7 +155,7 @@ async function listEmails(gmail) {
                                             messageId: res.data.messages[i].id,
                                             id: b.attachmentId
                                         }, (err2, res2) => {
-                                            if (err2) return console.log('The API returned an error: ' + err2);
+                                            if (err2) return console.log('[2] The API returned an error: ' + err2);
                                             let data = res2.data.data;
                                             resolve3(data.split(" ").join("+")
                                                 .split("_").join("/")
@@ -263,7 +263,7 @@ async function run(gmail) {
                             "raw": msg.asEncoded(),
                         }
                     }, (err, res) => {
-                        if (err) return console.log('The API returned an error: ' + err);
+                        if (err) return console.log('[3] The API returned an error: ' + err);
                         if (email.egress) {
                             console.log(`Routed back from ${email.sender.addr} to ${email.receiver}.`);
                             gmail.users.messages.modify({
@@ -297,7 +297,9 @@ async function run(gmail) {
                 break;
             }
         }
-        if (!routed && !email.sender.addr.includes("noreply")) {
+        if (!routed && email.sender.addr.length > 0 && !email.sender.addr.includes("noreply")
+            && !email.sender.addr.includes("no-reply")
+            && !email.sender.addr.includes("apps-scripts-notifications")) {
             const msg = createMimeMessage();
             msg.setSender({
                 name: "Advanced Programming Spring 01",
@@ -314,7 +316,7 @@ async function run(gmail) {
                         "raw": msg.asEncoded(),
                     }
                 }, (err, res) => {
-                    if (err) return console.log('The API returned an error: ' + err);
+                    if (err) return console.log('[4]  returned an error: ' + err);
                     console.log(`Error sent to ${email.sender.addr}.`);
                     gmail.users.messages.modify({
                         userId: 'me',
@@ -331,7 +333,7 @@ async function run(gmail) {
         }
     }
 
-    setTimeout(async () => await run(gmail), 30 * 1000);
+    setTimeout(async () => await run(gmail), 120 * 1000);
 }
 
 
@@ -340,7 +342,7 @@ function main(auth) {
     gmail.users.labels.list({
         userId: "me",
     }, (err, res) => {
-        if (err) return console.log('The API returned an error: ' + err);
+        if (err) return console.log('[5] The API returned an error: ' + err);
         labels.push(...res.data.labels.filter(data => data.name === "Invalid" ||
             data.name === "Backwarded" ||
             data.name === "Forwarded" ));
